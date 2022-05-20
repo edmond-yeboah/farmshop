@@ -1,0 +1,72 @@
+{% load static %}
+{% load crispy_forms_tags%}
+<!DOCTYPE html><html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="template" content="greeny">
+    <meta name="title" content="greeny - Ecommerce Food Store HTML Template">
+    <meta name="keywords" content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online">
+    <title>Merfar - Register</title>
+    
+    <link rel="stylesheet" href="{% static 'main/css/user-auth.css' %}">
+    <link rel="icon" href="{% static 'main/images/favicon.png'%}">
+    <link rel="stylesheet" href="{% static 'main/fonts/flaticon/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'main/fonts/icofont/icofont.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/fonts/fontawesome/fontawesome.micd videosn.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/venobox/venobox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/slickslider/slick.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/niceselect/nice-select.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/index.css' %}">
+
+</head>
+<body>
+    <section class="user-form-part">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8">
+                    <div class="user-form-logo"><a href="{% url 'home' %}"><img src="{% static 'main/images/logo1.png' %}" alt="logo"></a></div>
+                    <div class="user-form-card">
+                        <div class="user-form-title"><h2>Join Now!</h2><p>Setup A New Account In A Minute</p></div>
+                        <div class="user-form-group">
+                            <form class="user-form" action="" method="post">
+                                {% csrf_token %}
+                                <div class="form-group"><input type="text" class="form-control" placeholder="Enter your name" name="name" required></div>
+                                
+                                <div class="form-group">
+                                <select class="form-select" aria-label="Default select example" name="type" required>
+                                    <option selected>Select account type</option>
+                                    <option value="seller">Seller</option>
+                                    <option value="buyer">Buyer</option>
+                                  </select>
+                                </div>
+                                <div class="form-group"><input type="email" class="form-control" placeholder="Enter your email" required name="email"></div>
+                                <div class="form-group"><input type="password" class="form-control" placeholder="Enter your password" required name="password"></div>
+                                <div class="form-group"><input type="password" class="form-control" placeholder="Enter repeat password" required name="rpassword"></div>
+                                
+                                <div class="form-button"><button type="submit">register</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="user-form-remind"><p>Already Have An Account?<a href="{% url 'login' %}">login here</a></p></div>
+            <div class="user-form-footer"><p>MerFar | &COPY; Copyright by <a href="#">Gyan</a></p></div></div></div></div>
+        </section>
+
+        <script src="{% static 'main/vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
+        <script src="{% static 'main/vendor/bootstrap/popper.min.js' %}"></script>
+        <script src="{% static 'main/vendor/bootstrap/bootstrap.min.js' %}"></script>
+        <script src="{% static 'main/vendor/countdown/countdown.min.js' %}"></script>
+        <script src="{% static 'main/vendor/niceselect/nice-select.min.js' %}"></script>
+        <script src="{% static 'main/vendor/slickslider/slick.min.js' %}"></script>
+        <script src="{% static 'main/vendor/venobox/venobox.min.js' %}"></script>
+        <script src="{% static 'main/js/nice-select.js' %}"></script>
+        <script src="{% static 'main/js/countdown.js' %}"></script>
+        <script src="{% static 'main/js/accordion.js' %}"></script>
+        <script src="{% static 'main/js/venobox.js' %}"></script>
+        <script src="{% static 'main/js/slick.js' %}"></script>
+        <script src="{% static 'main/js/main.js' %}"></script>
+</body>
+</html>
