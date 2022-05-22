@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
@@ -18,7 +19,16 @@ from .models import Customusers
 #    return HttpResponse("<h1>view 1!</h1>") 
 
 def home(request):
-    return render(request, "index.html", {})
+    context={}
+
+    if request.user.is_authenticated:
+        if request.user.atype=="seller":
+            context["seller"] = "seller"
+        if request.user.atype == "buyer":
+            context["buyer"] = "buyer"
+    else:
+        context["none"]= "none"
+    return render(request, "index.html",context)
 
 def register(request):
     if request.method == "POST":
@@ -54,6 +64,12 @@ def register(request):
 
 
 def signin(request):
+    
+    if request.user.is_authenticated:
+        if request.user.atype == "seller":
+            return redirect("../seller_dash/")
+        else:
+            pass
     if request.method == "POST":
         try:
             email = request.POST["email"]
