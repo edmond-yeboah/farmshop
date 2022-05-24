@@ -1,0 +1,90 @@
+{% extends 'basetemp.html' %}
+{% block content %}
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+
+      
+      
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Your products</h4>
+            <div style="position:absolute; top:0; right:0; margin-top:13px; margin-right:13px;">
+            <a href="{% url 'addproduct' %}"><button type="submit" class="btn btn-primary mr-2">Add Product</button></a>
+            </div>
+            {% if notnone %}
+            <div class="table-responsive pt-3">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>
+                      Product
+                    </th>
+                    <th>
+                      Price
+                    </th>
+                    <th>
+                      SKU
+                    </th>
+                    <th>
+                      Category
+                    </th>
+                    <th>
+                      Date added
+                    </th>
+                    <th>
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for p in mypro %}
+                  <tr>
+                    <td>
+                      <a href="" style="text-decoration:none; color:green;">{{p.title}}</a>
+                    </td>
+                    <td>
+                      &#8373; {{p.price}}.00
+                    </td>
+                    <td>
+                      {{p.sku}}
+                    </td>
+                    <td>
+                      {{p.cat}}
+                    </td>
+                    <td>
+                      {{p.added_on | date}}
+                    </td>
+                    <td>
+                      <a href="{% url 'myproduct' %}?edit={{p.id}}"><button type="button" class="btn btn-inverse-success btn-icon">
+                        <i class="ti-pencil"></i>
+                      </button></a>
+                      <a href="{% url 'myproduct' %}?del={{p.id}}"> <button class="btn btn-inverse-danger btn-icon">
+                        <i class="ti-trash"></i>
+                      </button></a>
+                      
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% endif %}
+            {% if none %}
+            <br>
+            <br>
+            <div style="text-align:center; color:red;">
+            <p>You have no products</p>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      
+     
+      
+    </div>
+  </div>
+{% endblock %}

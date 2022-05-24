@@ -1,22 +1,12 @@
-from multiprocessing import context
+
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-
 from main import urls
-from .models import ToDoList,Item
 from django.contrib.auth import login, authenticate
-from .models import Customusers
+from .models import Customusers, categorie
 
 
 
-# Create your views here.
-
-#def index(response, name):
-    #ls = ToDoList.objects.get(id=id)
-#    return HttpResponse("<h1>Myfarm! %s</h1>"   % name)
-
-#def v1(response):
-#    return HttpResponse("<h1>view 1!</h1>") 
 
 def home(request):
     context={}
