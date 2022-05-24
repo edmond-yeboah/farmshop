@@ -42,7 +42,7 @@
                   {% for p in mypro %}
                   <tr>
                     <td>
-                      <a href="" style="text-decoration:none; color:green;">{{p.title}}</a>
+                      {{p.title}}
                     </td>
                     <td>
                       &#8373; {{p.price}}.00
@@ -57,7 +57,7 @@
                       {{p.added_on | date}}
                     </td>
                     <td>
-                      <a href="{% url 'myproduct' %}?edit={{p.id}}"><button type="button" class="btn btn-inverse-success btn-icon">
+                      <a href="{% url 'edit' p.id %}"><button type="button" class="btn btn-inverse-success btn-icon">
                         <i class="ti-pencil"></i>
                       </button></a>
                       <a href="{% url 'myproduct' %}?del={{p.id}}"> <button class="btn btn-inverse-danger btn-icon">

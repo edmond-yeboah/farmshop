@@ -35,9 +35,9 @@ def myproduct(request):
     else:
         context["none"] = "none"
 
-    if "edit" in request.GET:
-        eid = request.GET["edit"]
-        print("Edit was clicked "+ eid)
+    # if "edit" in request.GET:
+    #     eid = request.GET["edit"]
+    #     print("Edit was clicked "+ eid)
     
     if "del" in request.GET:
         delid = request.GET["del"]
@@ -64,6 +64,7 @@ def addproduct(request):
         #getting username of the seller
         user = Customusers.objects.get(username=request.user.username)
         try:
+            #getting user inputs from html form
             title = request.POST["title"]
             desc = request.POST["desc"]
             sku = request.POST["sku"]
@@ -73,7 +74,7 @@ def addproduct(request):
             imag = request.FILES["img"]
 
             try:
-                product.objects.create(
+                product.objects.create( #creating the new product
                     seller = user,
                     title = title,
                     desc = desc,
@@ -84,13 +85,53 @@ def addproduct(request):
                     image = imag,
                 )
 
-                return redirect("../products/")
+                return redirect("../products/") #redirecting to products page
             except Exception as e:
                 print(e)
         except Exception as e:
             print(e)
 
     return render(request,"addproduct.html",context)
+
+
+
+def edit(request,pid):
+    context={}
+
+    #getting all categories
+    allcat = categorie.objects.all()
+    context["allcat"] = allcat
+
+    #getting the product with id
+    theproduct = product.objects.get(id=pid)
+    if theproduct is not None:
+        context["pro"] = theproduct
+    else:
+        print("Did not get the product")
+
+    #if user clicks on update button
+    if request.method == "POST":
+        #getting input from html form
+        title = request.POST["title"]
+        desc = request.POST["desc"]
+        sku = request.POST["sku"]
+        brand = request.POST["brand"]
+        price = request.POST["price"]
+        cat = request.POST["cat"]
+
+        #updating product
+        theproduct.title = title
+        theproduct.desc = desc
+        theproduct.sku = sku
+        theproduct.brand = brand
+        theproduct.price = price
+        theproduct.cat = cat
+
+        theproduct.save() #saving product
+
+        return redirect("../../products/") #redirecting to products page
+    
+    return render(request,"editproduct.html",context)
 
 
 
