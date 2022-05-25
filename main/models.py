@@ -1,4 +1,5 @@
 
+from pyexpat import model
 from statistics import mode
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -28,7 +29,7 @@ class product(models.Model):
     desc = models.CharField(null=True,blank=True,max_length=700)
     sku = models.CharField(null=True,blank=True,max_length=20)
     brand = models.CharField(null=True,blank=True,max_length=500)
-    price = models.CharField(null=True,blank=True,max_length=20)
+    price = models.IntegerField(null=True,blank=True,default=0)
     image = models.ImageField(upload_to='product_images')
     cat = models.CharField(null=True,blank=True,max_length=20)
     seller = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
@@ -37,3 +38,11 @@ class product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class cart(models.Model):
+    buyer = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
+    item = models.ForeignKey(product,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.buyer.username

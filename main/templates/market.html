@@ -1,0 +1,177 @@
+{% extends 'basetemplate.html' %}
+{% block content %}
+
+<section
+class="inner-section single-banner"
+style="background: url(/static/main/images/single-banner.jpg) no-repeat center">
+<div class="container">
+  <h2>Welcome to Merfar</h2>
+  
+</div>
+</section>
+<section class="inner-section shop-part">
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="top-filter">
+        <form class="header-form" method="post" action="" style="border-color:green;">
+          {% csrf_token %}
+          <input type="text" placeholder="Search product name or category..." name="query" required>
+          <button type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if notfound %}
+  <div style="text-align:center;">
+    <p style="color:red;">No results for search query</p>
+  </div>
+  <div style="text-align:center; margin-top:20px;">
+    <a href="{% url 'market' %}"><p style="color:green;">Load all products</p></a>
+  </div>
+  {% endif %}
+
+  <br>
+  <br>
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-5">
+    {% for p in allpro %}
+    <div class="col">
+      <div class="product-card">
+        <div class="product-media">
+          <div class="product-label">
+            <label class="label-text new">new</label>
+          </div>
+          <a class="product-image" href=""
+            ><img src="{{p.image.url}}" alt="product"
+          /></a>
+          <div class="product-widget">
+            
+            
+            <a
+              title="Product View"
+              href="{{p.title}}"
+              class="fas fa-eye"
+              data-bs-toggle="modal"
+              data-bs-target="#{{p.title}}"
+            ></a>
+          </div>
+        </div>
+        <div class="product-content">
+          
+          <h6 class="product-name">
+            <a href="{{p.title}}"data-bs-toggle="modal"
+            data-bs-target="#{{p.title}}" >{{p.title}}</a>
+          </h6>
+          <h6 class="product-price">
+            <span>${{p.price}}<small>/one</small></span>
+          </h6>
+          <button class="product-add" style="background:green;" title="Add to Cart">
+            <a href="{% url 'market' %}?item={{p.id}}" style="color:white;"><i class="fas fa-shopping-basket"></i>
+            <span>add</span></a>
+        </button>
+          {% comment %} <div class="product-action">
+            <button class="action-minus" title="Quantity Minus">
+              <i class="icofont-minus"></i></button
+            ><input
+              class="action-input"
+              title="Quantity Number"
+              type="text"
+              name="quantity"
+              value="1"
+            /><button class="action-plus" title="Quantity Plus">
+              <i class="icofont-plus"></i>
+            </button>
+          </div> {% endcomment %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    
+    
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="bottom-paginate">
+        <p class="page-info">Showing {{allpro.number}} of {{allpro.paginator.num_pages}} Pages</p>
+        <ul class="pagination">
+          {% if allpro.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{allpro.previous_page_number}}"
+              ><i class="fas fa-long-arrow-alt-left"></i
+            ></a>
+          </li>
+          <li class="page-item">
+            <a class="page-link active" href="?page=1">1</a>
+          </li>
+          {% endif %}
+          {% comment %} <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li> {% endcomment %}
+          <li class="page-item">...</li>
+          {% if allpro.has_next %}
+          <li class="page-item"><a class="page-link" href="{{allpro.paginator.num_pages}}">{{allpro.paginator.num_pages}}</a></li>
+          <li class="page-item">
+            <a class="page-link" href="{{allpro.next_page_number}}"
+              ><i class="fas fa-long-arrow-alt-right"></i
+            ></a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<aside class="cart-sidebar">
+  <div class="cart-header">
+      <div class="cart-total"><i class="fas fa-shopping-basket"></i><span>total item ({{allcart | length}})</span></div><button
+          class="cart-close"><i class="icofont-close"></i></button>
+  </div>
+  <ul class="cart-list">
+      {% for a in allcart %}
+      <li class="cart-item">
+          <div class="cart-media"><a href="#"><img src="{{a.item.image.url}}" alt="product"></a>
+            <button class="cart-delete">
+              <a href="{% url 'market' %}?delid={{a.item.id}}"><i class="far fa-trash-alt"></i></a>
+                </button>
+              </div>
+          <div class="cart-info-group">
+              <div class="cart-info">
+                  <h6><a href="product-single.html">{{a.item.title}}</a></h6>
+                  <p>Unit Price - &#8373;{{a.item.price}}</p>
+              </div>
+              <div class="cart-action-group">
+                  <div class="product-action">
+                      <button class="action-minus" title="Quantity Minus">
+                          <i class="icofont-minus"></i>
+                      </button>
+                      <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
+                          <button class="action-plus" title="Quantity Plus">
+                          <i class="icofont-plus"></i>
+                      </button>
+                  </div>
+                  <h6>&#8373;56.98</h6>
+              </div>
+          </div>
+      </li>
+      {% endfor %}
+      
+      
+      
+      
+  </ul>
+  <div class="cart-footer">
+      
+              <a class="cart-checkout-btn" href="checkout.html">
+                  <span class="checkout-label">Proceed to Checkout</span>
+                  <span class="checkout-price">&#8373;{{tprice}}</span></a>
+  </div>
+</aside>
+
+
+
+{% endblock%}

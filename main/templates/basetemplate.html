@@ -1,0 +1,215 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="template" content="greeny">
+    <meta name="title" content="greeny - Ecommerce Food Store HTML Template">
+    <meta name="keywords"
+        content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online">
+    <title>Home - Merfar</title>
+    <link rel="icon" href="{% static 'main/images/logo1.png'%}">
+    <link rel="stylesheet" href="{% static 'main/fonts/flaticon/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'main/fonts/icofont/icofont.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/fonts/fontawesome/fontawesome.micd videosn.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/venobox/venobox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/slickslider/slick.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/niceselect/nice-select.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/vendor/bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'main/fonts/fontawesome/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/home-standard.css' %}">
+</head>
+
+<body>
+    {% comment %} <div class="backdrop"></div>
+    <a class="backtop fas fa-arrow-up" href="#"></a>
+    <div class="header-top alert fade show"> {% endcomment %}
+
+
+
+
+    </div>
+    <header class="header-part">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-media-group">
+                    <button class="header-user"><img src="{% static 'main/images/user.png' %}" alt="user"></button><a
+                        href="{% url 'home' %}"><img src="{% static 'main/images/logo1.png' %}" alt="logo"></a><button
+                        class="header-src"><i class="fas fa-search"></i></button>
+                </div><a href="{% url 'home' %}" class="header-logo "><img src="{% static 'main/images/logo1.png' %}"
+                        alt="logo"></a>
+                {% if buyer %}
+                <a href="#" class="header-widget" title="My Account">
+                    <img src="{% static 'main/images/user.png' %}" alt="user">
+                    <span>{% if request.user.name %} {{request.user.name}}{% else %}{{request.user.username}} {% endif %}  |</span>
+                    
+                </a>
+                <div style="margin-left:5px;">
+                <a href="{% url 'logoutUser' %}"><span style="color:red;"> Logout</span></a>
+                </div>
+                <form class="header-form"><input type="text" placeholder="Search anything..."><button><i
+                            class="fas fa-search"></i></button></form>
+                <div class="header-widget-group">
+                    <button class="header-widget header-cart" title="Cartlist">
+                        <i class="fas fa-shopping-basket"></i>
+                        <sup>{{allcart |length}}</sup>
+                        <span>total price<small>&#x20B5; {% if tprice %}{{tprice}} {% else %} 0{% endif %}</small></span>
+                    </button>
+                </div>
+                {% endif %}
+                
+                {% if seller %}
+                <a href="{% url 'signin' %}" class="header-widget" title="My Account">
+                    <img src="{% static 'main/images/user.png' %}" alt="user"><span>{% if request.user.name %}{{request.user.name}} {% else %} {{request.user.username}}{% endif %} </span></a>
+                <form class="header-form"><input type="text" placeholder="Search anything..."><button><i
+                            class="fas fa-search"></i></button></form>
+                {% endif %}
+
+                {% if none %}
+                <a href="{% url 'signin' %}" class="header-widget" title="My Account">
+                    <img src="{% static 'main/images/user.png' %}" alt="user"><span>Login</span></a>
+                <form class="header-form"><input type="text" placeholder="Search anything..."><button><i
+                            class="fas fa-search"></i></button></form>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <nav class="navbar-part">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="navbar-content">
+                        <ul class="navbar-list">
+                            <li class="navbar-item"><a class="navbar-link" href="{% url 'home' %}">home</a>
+                                
+                            </li>
+                            
+                            {% comment %} <li class="navbar-item"><a class="navbar-link" href="#">need help</a></li>
+                            <li class="navbar-item"><a class="navbar-link" href="#">contact us</a></li> {% endcomment %}
+                        </ul>
+                        <div class="navbar-select-group">
+                             {% comment %} <div class="navbar-select"><i class="fas fa-flag"></i><select class="select">
+                                    <option value="english" selected>english</option>
+
+                                    <option value="arabic">arabic</option>
+                                </select></div>  {% endcomment %}
+                            <div class="navbar-select"><i class="fas fa-funnel-dollar"></i><select class="select">
+                                    <option value="cedis" selected>cedis</option>
+                            </select></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+    {% for p in allpro %}
+    <div class="modal fade" id="{{p.title}}">
+        <div class="modal-dialog">
+            <div class="modal-content"><button class="modal-close icofont-close" data-bs-dismiss="modal"></button>
+                <div class="product-view">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+                            <div class="view-gallery">
+                                <div class="view-label-group"><label class="view-label new">new</label>
+                                   
+                                    </div>
+                                <ul class="preview-slider slider-arrow">
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                </ul>
+                                <ul class="thumb-slider">
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                    <li><img src="{{p.image.url}}" alt="product"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="view-details">
+                                <h3 class="view-name"><a href=" ">{{p.title}}</a></h3>
+                                <div class="view-meta">
+                                    <p>SKU:<span>{{p.sku}}</span></p>
+                                    <p>BRAND:<a href="#">{{p.brand}}</a></p>
+                                </div>
+                                <div class="view-rating">
+                                    <p>Product Score: </p><span style="color:green; margin-left:5px;">{{p.score}}</span>
+                                        <a href="#">({{p.score}} orders)</a></div>
+                                <h3 class="view-price"><span>&#8373;{{p.price}}<small>/per one</small></span></h3>
+                                <p class="view-desc">{{p.desc}}</p>
+                                <div class="view-list-group"><label class="view-list-title">tags:</label>
+                                    <ul class="view-tag-list">
+                                        <li><a href="#">organic</a></li>
+                                        <li><a href="#">{{p.cat}}</a></li>
+                                        {% comment %} <li><a href="#">chilis</a></li> {% endcomment %}
+                                    </ul>
+                                </div>
+ 
+                                <br>
+                                <br>
+                                <div class="view-add-group">
+                                    <button class="product-add" title="Add to Cart">
+                                        <i class="fas fa-shopping-basket"></i>
+                                        <span>add to cart</span>
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+{% block content %}{% endblock%}
+
+
+<footer class="footer-part">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-xl-3">
+                <div class="footer-widget">
+                    <a class="footer-logo" href="#"><img src="/static/main/images/logo1.png" alt="logo"></a><p class="footer-desc">Adipisci asperiores ipsum ipsa repellat consequatur repudiandae quisquam assumenda dolor perspiciatis sit ipsum dolor amet.</p><ul class="footer-social"><li><a class="icofont-facebook" href="#"></a></li><li><a class="icofont-twitter" href="#"></a></li><li><a class="icofont-linkedin" href="#"></a></li><li><a class="icofont-instagram" href="#"></a></li><li><a class="icofont-pinterest" href="#"></a></li></ul></div></div><div class="col-sm-6 col-xl-3"><div class="footer-widget contact"><h3 class="footer-title">contact us</h3><ul class="footer-contact"><li><i class="icofont-ui-email"></i><p><span>support@example.com</span><span>carrer@example.com</span></p></li><li><i class="icofont-ui-touch-phone"></i><p><span>+120 279 532 13</span><span>+120 279 532 14</span></p></li><li><i class="icofont-location-pin"></i><p>1Hd- 50, 010 Avenue, NY 90001 United States</p></li></ul></div></div><div class="col-sm-6 col-xl-3"><div class="footer-widget"><h3 class="footer-title">quick Links</h3><div class="footer-links"><ul><li><a href="#">My Account</a></li><li><a href="#">Order History</a></li><li><a href="#">Order Tracking</a></li><li><a href="#">Best Seller</a></li><li><a href="#">New Arrivals</a></li></ul><ul><li><a href="#">Location</a></li><li><a href="#">Affiliates</a></li><li><a href="#">Contact</a></li><li><a href="#">Carrer</a></li><li><a href="#">Faq</a></li></ul></div></div></div><div class="col-sm-6 col-xl-3"><div class="footer-widget"><h3 class="footer-title">Download App</h3><p class="footer-desc">Lorem ipsum dolor sit amet tenetur dignissimos ipsum eligendi autem obcaecati minus ducimus totam reprehenderit exercitationem!</p><div class="footer-app"><a href="#"><img src="/static/main/images/google-store.png" alt="google"></a><a href="#"><img src="/static/main/images/app-store.png" alt="app"></a></div></div></div></div><div class="row"><div class="col-12"><div class="footer-bottom"><p class="footer-copytext">&copy; All Copyrights Reserved by <a href="#">Mironcoder</a></p>
+                    <div class="footer-card">
+                        <a href="#"><img src="/static/main/images/payment/jpg/01.jpg" alt="payment"></a><a href="#"><img src="/static/main/images/payment/jpg/02.jpg" alt="payment"></a><a href="#"><img src="/static/main/images/payment/jpg/03.jpg" alt="payment"></a><a href="#"><img src="/static/main/images/payment/jpg/04.jpg" alt="payment"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'main/vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'main/vendor/bootstrap/popper.min.js' %}"></script>
+<script src="{% static 'main/vendor/bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'main/vendor/countdown/countdown.min.js' %}"></script>
+<script src="{% static 'main/vendor/niceselect/nice-select.min.js' %}"></script>
+<script src="{% static 'main/vendor/slickslider/slick.min.js' %}"></script>
+<script src="{% static 'main/vendor/venobox/venobox.min.js' %}"></script>
+<script src="{% static 'main/js/nice-select.js' %}"></script>
+<script src="{% static 'main/js/countdown.js' %}"></script>
+<script src="{% static 'main/js/accordion.js' %}"></script>
+<script src="{% static 'main/js/venobox.js' %}"></script>
+<script src="{% static 'main/js/slick.js' %}"></script>
+<script src="{% static 'main/js/main.js' %}"></script>
+
+</body>
+
+</html>
