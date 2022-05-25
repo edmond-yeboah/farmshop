@@ -218,14 +218,16 @@
                     <div class="cart-action-group">
                         <div class="product-action">
                             <button class="action-minus" title="Quantity Minus">
-                                <i class="icofont-minus"></i>
+                                <a href="{% url 'home' %}?minus={{a.id}}"><i class="icofont-minus"></i></a>
                             </button>
-                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="1">
-                                <button class="action-plus" title="Quantity Plus">
-                                <i class="icofont-plus"></i>
+
+                            <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{a.quantity}}">
+
+                            <button class="action-plus" title="Quantity Plus">
+                                <a href="{% url 'home' %}?plus={{a.id}}"><i class="icofont-plus"></i></a>
                             </button>
                         </div>
-                        <h6>&#8373;56.98</h6>
+                        <h6>&#8373;{% if a.actual_price %}{{a.actual_price}} {% else %}{{a.item.price}} {% endif %}</h6>
                     </div>
                 </div>
             </li>
@@ -235,12 +237,14 @@
             
             
         </ul>
+        {% if tprice %}
         <div class="cart-footer">
             
-                    <a class="cart-checkout-btn" href="checkout.html">
+                    <a class="cart-checkout-btn" href="{% url 'checkoutpage' %}">
                         <span class="checkout-label">Proceed to Checkout</span>
                         <span class="checkout-price">&#8373;{{tprice}}</span></a>
         </div>
+        {% endif %}
     </aside>
     
 

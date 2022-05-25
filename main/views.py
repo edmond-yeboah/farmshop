@@ -1,12 +1,16 @@
 
+from ast import While
 import imp
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render,get_object_or_404
 from django.http import HttpResponse
 from main import urls
 from django.contrib.auth import login, authenticate
-from .models import Customusers, categorie, product,cart
+from .models import Customusers, categorie, product,cart,Payment
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.http import HttpRequest,HttpResponse
+import secrets
+from django.conf import settings
 
 
 
@@ -35,7 +39,7 @@ def home(request):
         if len(allcartitem)>0:
             totalprice=0
             for c in allcartitem:
-                totalprice = totalprice + c.item.price
+                totalprice = totalprice + (c.item.cart_price * c.quantity)
                 context["tprice"] = totalprice
         else:
             pass
@@ -66,6 +70,29 @@ def home(request):
         else:
             return redirect("../login/")
 
+    #checking if user is increasing item quantity
+    if "plus" in request.GET:
+        cartid = request.GET["plus"]
+        thecart = cart.objects.get(id=cartid)
+        #updating the quantity
+        thecart.quantity = thecart.quantity + 1
+        thecart.save()
+        thecart.actual_price = thecart.item.price * thecart.quantity
+        thecart.save()
+        return redirect("../")
+
+    #checking if user is decreasing item quantity
+    if "minus" in request.GET:
+        carti = request.GET["minus"]
+        tcart = cart.objects.get(id=carti)
+        if tcart.quantity >1:
+            tcart.quantity = tcart.quantity - 1
+            tcart.save()
+            tcart.actual_price = tcart.actual_price - tcart.item.price
+            tcart.save()
+            return redirect("../")
+        else:
+            pass
     return render(request, "index.html",context)
 
 
@@ -160,7 +187,7 @@ def market(request):
     if len(allcartitem)>0:
         totalprice=0
         for c in allcartitem:
-            totalprice = totalprice + c.item.price
+            totalprice = totalprice + (c.item.cart_price * c.quantity)
             context["tprice"] = totalprice
     else:
         pass
@@ -271,6 +298,152 @@ def market(request):
         page_number = request.GET.get('page')
         context["allpro"] = paginator.get_page(page_number)
 
+    #checking if user is increasing item quantity
+    if "plus" in request.GET:
+        cartid = request.GET["plus"]
+        thecart = cart.objects.get(id=cartid)
+        #updating the quantity
+        thecart.quantity = thecart.quantity + 1
+        thecart.save()
+        thecart.actual_price = thecart.item.price * thecart.quantity
+        thecart.save()
+        return redirect("../")
+
+    #checking if user is decreasing item quantity
+    if "minus" in request.GET:
+        carti = request.GET["minus"]
+        tcart = cart.objects.get(id=carti)
+        if tcart.quantity >1:
+            tcart.quantity = tcart.quantity - 1
+            tcart.save()
+            tcart.actual_price = tcart.actual_price - tcart.item.price
+            tcart.save()
+            return redirect("../")
+        else:
+            pass
+
+
     return render(request,"market.html",context)
+
+
+
+@login_required(login_url='signin')
+def checkoutpage(request):
+    context={}
+    
+    #checking which user is logged in
+    if request.user.is_authenticated:
+        if request.user.atype=="seller":
+            context["seller"] = "seller"
+        if request.user.atype == "buyer":
+            context["buyer"] = "buyer"
+    else:
+        context["none"]= "none"
+
+
+     #fetching all cart items for user
+    allcartitem = cart.objects.filter(buyer=Customusers.objects.get(username=request.user.username))
+    context["allcart"]=allcartitem
+    if len(allcartitem)>0:
+        totalprice=0
+        for c in allcartitem:
+            totalprice = totalprice + (c.item.cart_price * c.quantity)
+            context["tprice"] = totalprice
+    else:
+        pass
+
+
+    #checking if user is increasing item quantity
+    if "plus" in request.GET:
+        cartid = request.GET["plus"]
+        thecart = cart.objects.get(id=cartid)
+        #updating the quantity
+        thecart.quantity = thecart.quantity + 1
+        thecart.save()
+        thecart.actual_price = thecart.item.price * thecart.quantity
+        thecart.save()
+        
+        return redirect("../checkoutpage")
+
+    #checking if user is decreasing item quantity
+    if "minus" in request.GET:
+        carti = request.GET["minus"]
+        tcart = cart.objects.get(id=carti)
+        if tcart.quantity >1:
+            tcart.quantity = tcart.quantity - 1
+            tcart.save()
+            tcart.actual_price = tcart.actual_price - tcart.item.price
+            tcart.save()
+            
+            return redirect("../checkoutpage")
+        else:
+            pass
+
+    #checking if user wants to delete item from cart
+    if "delid" in request.GET:
+        delid = request.GET["delid"]
+        #getting item to delete from cart
+        cart.objects.filter(buyer=Customusers.objects.get(username=request.user.username)).filter(item=product.objects.get(id=delid)).delete()
+        
+        return redirect("../checkoutpage")
+
+
+    
+
+        #fetching all cart items for user
+    allcartitem = cart.objects.filter(buyer=Customusers.objects.get(username=request.user.username))
+    context["allcart"]=allcartitem
+    if len(allcartitem)>0:
+        totalprice=0
+        for c in allcartitem:
+            totalprice = totalprice + (c.item.cart_price * c.quantity)
+            context["tprice"] = totalprice
+    else:
+        pass
+
+
+    try:
+        newPayment = Payment()
+
+        #generating a reference
+        while not newPayment.ref:
+            ref = secrets.token_urlsafe(10)
+            similar_ref = Payment.objects.filter(ref=ref)
+            if not similar_ref:
+                newPayment.ref = ref
+
+        #multiplying amount by 100
+        newamount = int(totalprice) * 100
+        print(newamount)
+
+        newPayment.fname = request.user.name
+        newPayment.lname = request.user.name
+        newPayment.email = request.user.email
+        newPayment.amount = totalprice
+
+        newPayment.save()
+
+        context["amount"] = totalprice
+        context["ref"] = ref
+        context["publicKey"] = settings.PAYSTACK_PK
+        context["email"] = request.user.email
+        context["amount"] =newamount
+        context["disamount"] = totalprice
+
+        context["paynow"] = "paynow"
+
+    except Exception as e:
+        print(e)
+    
+
+    return render(request,"checkoutpage.html",context)
+
+
+
+def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
+    payment = get_object_or_404(Payment,ref=ref)
+    verified = payment.verify_payment()
+    print(verified)
+    return redirect('home')
 
     

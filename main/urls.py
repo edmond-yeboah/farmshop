@@ -8,4 +8,6 @@ urlpatterns = [
     path("register/",views.register, name="register"),
     path("login/",views.signin, name="signin"),
     path("market/",views.market, name="market"),
+    path("checkoutpage/",views.checkoutpage,name="checkoutpage"),
+    path("<str:ref>/", views.verify_payment, name="verify-payment"),
 ]  

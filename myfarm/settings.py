@@ -133,3 +133,7 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+PAYSTACK_SK='sk_test_98a1be3b08a8f4275bd0e5bfd34aefb607bac09e'
+PAYSTACK_PK='pk_test_355f5e8ff5d84023ae254028abea9efda0f066dd'
