@@ -8,6 +8,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
       ('Extra Fields', {'fields':
        ('atype',
+       'earning',
        'name')}),
      )
 admin.site.register(Customusers, CustomUserAdmin)

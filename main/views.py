@@ -29,17 +29,18 @@ def register(request):
             password = request.POST["password"]
             cpassword = request.POST["rpassword"]
 
-            user = Customusers()
-            user.username = email
-            user.save()
-            user.email = email
-            user.save()
-            user.atype = type
-            user.save()
-            user.set_password(cpassword)
-            user.save()
+            if password == cpassword:
+                user = Customusers()
+                user.username = email
+                user.save()
+                user.email = email
+                user.save()
+                user.atype = type
+                user.save()
+                user.set_password(cpassword)
+                user.save()
 
-            return redirect("../")
+                return redirect("../")
             
         except Exception as e:
             print(e)

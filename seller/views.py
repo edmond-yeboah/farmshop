@@ -1,5 +1,6 @@
 from ast import Try
 import imp
+from multiprocessing import context
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -11,14 +12,21 @@ from main import urls
 
 @login_required(login_url='signin')#user must login to access this page
 def dash(request):#dashboard function
+    context = {}
 
-    if "id" in request.GET:
-        idd = request.GET["id"]
-        if idd =="1":
-            pass
-            
+    #getting all top products
+    toppro = product.objects.filter(seller=Customusers.objects.get(username= request.user.username)).filter(score__gte=3).order_by('-score')
+    if len(toppro)>0:
+        context["toppro"] = toppro
+        context["notnone"] = "notnone"
+    else:
+        context["none"]="none" 
+
+    #getting all products
+    allpro = product.objects.filter(seller=Customusers.objects.get(username=request.user.username))
+    context["allpro"] = allpro 
     
-    return render (request,"dashboard.html")
+    return render (request,"dashboard.html",context)
 
 
 

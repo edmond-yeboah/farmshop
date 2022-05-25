@@ -10,6 +10,7 @@ class Customusers(AbstractUser):
     email = models.EmailField(null=True, blank=True, unique=False)
     atype = models.CharField(null=True, blank=True, max_length=30)
     name = models.CharField(null=True, blank=True,max_length=300)
+    earning = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return self.username
@@ -31,7 +32,7 @@ class product(models.Model):
     image = models.ImageField(upload_to='product_images')
     cat = models.CharField(null=True,blank=True,max_length=20)
     seller = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE)
-    score = models.CharField(null=True,blank=True,max_length=400)
+    score = models.IntegerField(null=True,blank=True,default=0)
     added_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
