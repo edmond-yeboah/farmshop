@@ -390,7 +390,7 @@ def checkoutpage(request):
 
     
 
-        #fetching all cart items for user
+    #fetching all cart items for user
     allcartitem = cart.objects.filter(buyer=Customusers.objects.get(username=request.user.username))
     context["allcart"]=allcartitem
     if len(allcartitem)>0:
@@ -443,7 +443,9 @@ def checkoutpage(request):
 def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
     payment = get_object_or_404(Payment,ref=ref)
     verified = payment.verify_payment()
-    print(verified)
+    if verified:
+        #get all cart items for user and delete
+        cart.objects.filter(buyer=Customusers.objects.get(username=request.user.username)).delete()
     return redirect('home')
 
     
