@@ -88,6 +88,7 @@ def addproduct(request):
                     desc = desc,
                     sku = sku,
                     price = price,
+                    cart_price =price,
                     brand = brand,
                     cat = cat,
                     image = imag,

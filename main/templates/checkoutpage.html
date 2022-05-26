@@ -1,0 +1,177 @@
+{% extends 'basetemplate.html' %}
+{% block content %}
+
+<section
+			class="inner-section single-banner"
+			style="background: url(/static/main/images/single-banner.jpg) no-repeat center"
+		>
+			<div class="container">
+				<h2>checkout</h2>
+				
+			</div>
+		</section>
+		<section class="inner-section checkout-part">
+			<div class="container">
+				<div class="row">
+					
+					<div class="col-lg-12">
+						<div class="account-card">
+							<div class="account-title"><h4>Your order</h4></div>
+							<div class="account-content">
+								<div class="table-scroll">
+									<table class="table-list">
+										<thead>
+											<tr>
+												<th scope="col">Product</th>
+												<th scope="col">Name</th>
+												<th scope="col">Price</th>
+												<th scope="col">brand</th>
+												<th scope="col">quantity</th>
+												{% comment %} <th scope="col">action</th> {% endcomment %}
+											</tr>
+										</thead>
+										<tbody>
+                                            {% for a in allcart %}
+											<tr>
+												<td class="table-image">
+													<img src="{{a.item.image.url}}" alt="product" />
+												</td>
+												<td class="table-name"><h6>{{a.item.title}}</h6></td>
+												<td class="table-price">
+													<h6>&#8373;{{a.item.price}}<small>/one</small></h6>
+												</td>
+												<td class="table-brand"><h6>{{a.item.brand}}</h6></td>
+												<td class="table-quantity"><h6>{{a.quantity}}</h6></td>
+												{% comment %} <td class="table-action">
+													<a class="trash" href="{% url 'checkoutpage' %}?delid={{a.item.id}}" title="Remove Wishlist"
+														><i class="icofont-trash"></i
+													></a>
+												</td> {% endcomment %}
+											</tr>
+											{% endfor %}
+											
+											
+											
+										</tbody>
+									</table>
+								</div>
+								<div class="chekout-coupon">
+									
+								</div>
+								<div class="checkout-charge">
+									<ul>
+										<li><span>Sub total</span><span>&#8373;{{tprice}}</span></li>
+										<li><span>discount</span><span>$00.00</span></li>
+										<li>
+											<span>Total<small>(Incl. VAT)</small></span
+											><span>&#8373;{{tprice}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					<div class="col-lg-12">
+						<div class="account-card mb-10 mt-10">
+
+                            
+                            {% if paynow %}
+							<br>
+                            <script src="https://js.paystack.co/v1/inline.js"></script> 
+							<div class="checkout-proced">
+								<button class="btn btn-inline" onclick="payWithPayStack()" >Make payment</button>
+							</div>
+                        
+                            {% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+        {% comment %} <aside class="cart-sidebar">
+            <div class="cart-header">
+                <div class="cart-total"><i class="fas fa-shopping-basket"></i><span>total item ({{allcart | length}})</span></div><button
+                    class="cart-close"><i class="icofont-close"></i></button>
+            </div>
+            <ul class="cart-list">
+                {% for a in allcart %}
+                <li class="cart-item">
+                    <div class="cart-media">
+                        <a href="#">
+                            <img src="{{a.item.image.url}}" alt="product"></a>
+                            <button class="cart-delete">
+                                <a href="{% url 'checkoutpage' %}?delid={{a.item.id}}"><i class="far fa-trash-alt"></i></a>
+                            </button>
+                        </div>
+                    <div class="cart-info-group">
+                        <div class="cart-info">
+                            <h6><a href="product-single.html">{{a.item.title}}</a></h6>
+                            <p>Unit Price - &#8373;{{a.item.price}}</p>
+                        </div>
+                        <div class="cart-action-group">
+                            <div class="product-action">
+                                <button class="action-minus" title="Quantity Minus">
+                                    <a href="{% url 'checkoutpage' %}?minus={{a.id}}"><i class="icofont-minus"></i></a>
+                                </button>
+    
+                                <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{a.quantity}}">
+    
+                                <button class="action-plus" title="Quantity Plus">
+                                    <a href="{% url 'checkoutpage' %}?plus={{a.id}}"><i class="icofont-plus"></i></a>
+                                </button>
+                            </div>
+                            <h6>&#8373;{% if a.actual_price %}{{a.actual_price}} {% else %}{{a.item.price}} {% endif %}</h6>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                
+                
+                
+                
+            </ul>
+            {% if tprice %}
+            <div class="cart-footer" hidden>
+                
+                        <a class="cart-checkout-btn" href="{% url 'checkoutpage' %}">
+                            <span class="checkout-label">Proceed to Checkout</span>
+                            <span class="checkout-price">&#8373;{{tprice}}</span></a>
+            </div>
+            {% endif %}
+        </aside> {% endcomment %}
+        
+        <script>
+            function payWithPayStack(){
+                let currency = "GHS";
+                let plan = "";
+                let ref = "{{ref}}"
+        
+                let obj={
+                    key:"{{publicKey}}",
+                    email:"{{email}}",
+                    amount:"{{amount}}",
+                    ref:ref,
+                    callback:function(response){
+                        window.location.href = "{% url 'verify-payment' ref %}";
+                    }
+                }
+        
+                if(Boolean(currency)){
+                    obj.currency = currency.toUpperCase();
+                }
+                if(Boolean(plan)){
+                    obj.plan=plan;
+                }
+        
+                var handler = PaystackPop.setup(obj);
+                handler.openIframe();
+            }
+        
+        </script>
+        
+{% endblock%}
